@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEM-ACCESS PROTECTED SYSTEM</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #33ff33;
+      font-family: monospace;
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    input {
+      background: black;
+      color: #33ff33;
+      border: 1px solid #33ff33;
+      font-family: monospace;
+      font-size: 18px;
+      padding: 10px;
+      width: 300px;
+    }
+
+    button {
+      background: #000;
+      color: #33ff33;
+      border: 1px solid #33ff33;
+      padding: 10px 20px;
+      font-family: monospace;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>LEM-ACCESS PROTECTED SYSTEM</h1>
+  <p>ENTER CLEARANCE CODE:</p>
+  <input type="password" id="codeInput" />
+  <br><br>
+  <button onclick="verifyCode()">ACCESS SYSTEM</button>
+  <div class="error" id="error"></div>
+
+  <script>
+    function verifyCode() {
+      const input = document.getElementById("codeInput").value;
+      if (input === "PROT63D:OVERRIDE") {
+        window.location.href = "terminal.html";
+      } else {
+        document.getElementById("error").innerText = "ACCESS DENIED: INVALID CLEARANCE CODE";
+      }
+    }
+  </script>
+</body>
+</html>
