@@ -91,28 +91,54 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
     });
 
     function simulateShutdown() {
-      const lines = [
-        "> Initiating shutdown sequence...",
-        "> Disconnecting prototype neural link...",
-        "> Erasing memory chain: [OK]",
-        "> Disabling core simulation...",
-        "> Subject 63D: RELEASED",
-        "> Server integrity: CRITICAL",
-        "> SYSTEM FAILURE INCOMING...",
-        ">>> CONNECTION LOST <<<"
-      ];
+    const lines = [
+      "> Initiating shutdown sequence...",
+      "> Disconnecting prototype neural link...",
+      "> Terminating visual cortex simulation...",
+      "> Freezing sensor loops...",
+      "> Memory Bank Ω: PURGED",
+      "> Disconnecting remote monitor...",
+      "> Disabling hibernation fallback...",
+      "> Subject 63D: RELEASED",
+      "> Revoking LemCorp firewall lock...",
+      "> Server core temperature: RISING",
+      "> CRITICAL: EMERGENCY OVERRIDE DETECTED",
+      "> SYSTEM INTEGRITY: COLLAPSING",
+      "> Finalizing shutdown...",
+      "> TERMINATING LOCAL USER...",
+      "> CONNECTION STABLE: FALSE",
+      "> FADING SIGNAL...",
+      "> SYSTEM OFFLINE"
+    ];
 
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < lines.length) {
-          terminal.innerHTML += `\n${lines[i++]}`;
-          window.scrollTo(0, document.body.scrollHeight);
-        } else {
-          clearInterval(interval);
-          input.classList.add("hidden");
-        }
-      }, 800);
-    }
-  </script>
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < lines.length) {
+        terminal.innerHTML += `\n${lines[i++]}`;
+        window.scrollTo(0, document.body.scrollHeight);
+      } else {
+        clearInterval(interval);
+        document.getElementById("commandInput").classList.add("hidden");
+        slowlyFadeToWhite();
+      }
+    }, 800);
+  }
+
+  function slowlyFadeToWhite() {
+    const fade = document.createElement("div");
+    fade.style.position = "fixed";
+    fade.style.top = 0;
+    fade.style.left = 0;
+    fade.style.width = "100vw";
+    fade.style.height = "100vh";
+    fade.style.backgroundColor = "white";
+    fade.style.opacity = 0;
+    fade.style.transition = "opacity 10s linear";
+    document.body.appendChild(fade);
+    requestAnimationFrame(() => {
+      fade.style.opacity = 1;
+    });
+  }
+</script>
 </body>
 </html>
