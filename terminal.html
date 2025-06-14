@@ -135,6 +135,7 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
     fade.style.backgroundColor = "white";
     fade.style.opacity = 0;
     fade.style.transition = "opacity 10s linear";
+    fade.style.zIndex = 1000;
     document.body.appendChild(fade);
 
     // Fade in over 10 seconds
@@ -142,7 +143,7 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
       fade.style.opacity = 1;
     });
 
-    // After fade completes, show secret message
+    // After fade completes, show secret message on top
     setTimeout(() => {
       const msg = document.createElement("div");
       msg.textContent = "[ SYSTEM LOCKED. YOU WERE NEVER SUPPOSED TO SEE THIS. ]";
@@ -157,7 +158,7 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
       msg.style.padding = "20px 40px";
       msg.style.border = "2px solid #ff0000";
       msg.style.borderRadius = "8px";
-      msg.style.zIndex = 9999;
+      msg.style.zIndex = 2000; /* higher than fade */
       msg.style.textAlign = "center";
       document.body.appendChild(msg);
     }, 10000); // 10 seconds = fade duration
