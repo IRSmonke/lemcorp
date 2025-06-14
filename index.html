@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LEM-ACCESS PROTECTED SYSTEM</title>
   <style>
     body {
@@ -12,7 +12,6 @@
       text-align: center;
       margin-top: 100px;
     }
-
     input {
       background: black;
       color: #33ff33;
@@ -22,7 +21,6 @@
       padding: 10px;
       width: 300px;
     }
-
     button {
       background: #000;
       color: #33ff33;
@@ -32,28 +30,49 @@
       font-size: 16px;
       cursor: pointer;
     }
-
     .error {
       color: red;
       margin-top: 20px;
+      height: 20px;
     }
   </style>
 </head>
 <body>
   <h1>LEM-ACCESS PROTECTED SYSTEM</h1>
   <p>ENTER CLEARANCE CODE:</p>
-  <input type="password" id="codeInput" />
-  <br><br>
-  <button onclick="verifyCode()">ACCESS SYSTEM</button>
+  <input type="password" id="codeInput" autocomplete="off" />
+  <br /><br />
+  <button id="accessBtn">ACCESS SYSTEM</button>
   <div class="error" id="error"></div>
 
   <script>
+    const correctCode = "PROT63D:OVERRIDE";
+    let attemptsLeft = 3;
+
+    const input = document.getElementById("codeInput");
+    const errorDiv = document.getElementById("error");
+    const button = document.getElementById("accessBtn");
+
+    button.addEventListener("click", verifyCode);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") verifyCode();
+    });
+
     function verifyCode() {
-      const input = document.getElementById("codeInput").value;
-      if (input === "PROT63D:OVERRIDE") {
+      const inputVal = input.value.trim();
+      if (inputVal === correctCode) {
         window.location.href = "terminal.html";
       } else {
-        document.getElementById("error").innerText = "ACCESS DENIED: INVALID CLEARANCE CODE";
+        attemptsLeft--;
+        if (attemptsLeft > 0) {
+          errorDiv.textContent = `ACCESS DENIED. Attempts remaining: ${attemptsLeft}`;
+          input.value = "";
+          input.focus();
+        } else {
+          errorDiv.textContent = "SYSTEM LOCKED. TOO MANY FAILED ATTEMPTS.";
+          input.disabled = true;
+          button.disabled = true;
+        }
       }
     }
   </script>
