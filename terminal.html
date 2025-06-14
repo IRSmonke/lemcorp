@@ -1,97 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hollow Systems Terminal</title>
-  <style>
-    body {
-      background-color: black;
-      color: #33ff33;
-      font-family: monospace;
-      padding: 20px;
-      font-size: 16px;
-      overflow: hidden;
-      animation: flicker 1.2s infinite alternate;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 1; }
-      50% { opacity: 0.92; }
-      100% { opacity: 1; }
-    }
-
-    #terminal {
-      white-space: pre-wrap;
-      line-height: 1.5;
-      text-shadow: 0 0 5px #33ff33;
-    }
-
-    input {
-      background: black;
-      color: #33ff33;
-      border: none;
-      outline: none;
-      width: 100%;
-      font-family: monospace;
-      font-size: 16px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .scanlines::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0px,
-        rgba(0, 0, 0, 0) 2px,
-        rgba(0, 0, 0, 0.2) 3px
-      );
-      pointer-events: none;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LemCorp Dev Terminal</title>
+<style>
+  body {
+    background: black;
+    color: #33ff33;
+    font-family: monospace;
+    margin: 0; padding: 20px;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #terminal {
+    white-space: pre-wrap;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid #33ff33;
+    padding: 10px;
+    background: #000;
+  }
+  #commandInput {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: black;
+    color: #33ff33;
+    border: 1px solid #33ff33;
+    font-family: monospace;
+    font-size: 16px;
+  }
+  .hidden {
+    display: none;
+  }
+</style>
 </head>
-<body class="scanlines">
-  <div id="terminal">
-HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
-> Initializing secure connection...
-> Connected to node [172.16.0.3]:9443
-> USER AUTH: root_beta
-> PROTOCOL ACTIVE [PROTO_63D]
-> Awaiting command...
-  </div>
+<body>
 
-  <input id="commandInput" autocomplete="off" autofocus />
-
-  <script>
-    const terminal = document.getElementById("terminal");
-    const input = document.getElementById("commandInput");
-
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        const command = input.value.trim();
-        terminal.innerHTML += `\n> ${command}`;
-
-        if (command.toUpperCase() === "TERMINATE") {
-          simulateShutdown();
-        } else {
-          terminal.innerHTML += `\n> ERROR: Unknown command \"${command}\"`;
-        }
-
-        input.value = "";
-        window.scrollTo(0, document.body.scrollHeight);
-      }
-    });
+<div id="terminal">LEM-CORP SYSTEM TERMINAL v1.0\n&gt; Enter password to proceed:\n&gt; </div>
+<input id="commandInput" type="text" autocomplete="off" placeholder="Enter password..." />
 
 <script>
-  function simulateShutdown() {
+  const terminal = document.getElementById("terminal");
+  const input = document.getElementById("commandInput");
+
+  const correctPassword = "PROT63D:OVERRIDE";
+  let attempts = 3;
+
+  input.focus();
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const command = input.value.trim();
+      if (!command) return;
+
+      terminal.textContent += command + "\n";
+
+      if (command === correctPassword) {
+        terminal.textContent += "> ACCESS GRANTED\n";
+        input.value = "";
+        input.disabled = true;
+        input.classList.add("hidden");
+        runShutdownSequence();
+      } else {
+        attempts--;
+        terminal.textContent += `> ACCESS DENIED. Attempts left: ${attempts}\n`;
+        input.value = "";
+        if (attempts <= 0) {
+          terminal.textContent += "> SYSTEM LOCKED. TOO MANY FAILED ATTEMPTS.\n";
+          input.disabled = true;
+        }
+      }
+
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+  });
+
+  function runShutdownSequence() {
     const lines = [
       "> Initiating shutdown sequence...",
       "> Disconnecting prototype neural link...",
@@ -115,11 +101,10 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
     let i = 0;
     const interval = setInterval(() => {
       if (i < lines.length) {
-        terminal.innerHTML += `\n${lines[i++]}`;
-        window.scrollTo(0, document.body.scrollHeight);
+        terminal.textContent += lines[i++] + "\n";
+        terminal.scrollTop = terminal.scrollHeight;
       } else {
         clearInterval(interval);
-        document.getElementById("commandInput").classList.add("hidden");
         slowlyFadeToWhite();
       }
     }, 800);
@@ -138,12 +123,10 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
     fade.style.zIndex = 1000;
     document.body.appendChild(fade);
 
-    // Fade in over 10 seconds
     requestAnimationFrame(() => {
       fade.style.opacity = 1;
     });
 
-    // After fade completes, show secret message on top
     setTimeout(() => {
       const msg = document.createElement("div");
       msg.textContent = "[ SYSTEM LOCKED. YOU WERE NEVER SUPPOSED TO SEE THIS. ]";
@@ -158,11 +141,12 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
       msg.style.padding = "20px 40px";
       msg.style.border = "2px solid #ff0000";
       msg.style.borderRadius = "8px";
-      msg.style.zIndex = 2000; /* higher than fade */
+      msg.style.zIndex = 1100;
       msg.style.textAlign = "center";
       document.body.appendChild(msg);
-    }, 10000); // 10 seconds = fade duration
+    }, 10000);
   }
 </script>
+
 </body>
 </html>
