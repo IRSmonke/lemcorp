@@ -90,7 +90,8 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
       }
     });
 
-    function simulateShutdown() {
+<script>
+  function simulateShutdown() {
     const lines = [
       "> Initiating shutdown sequence...",
       "> Disconnecting prototype neural link...",
@@ -135,9 +136,31 @@ HOLLOW SYSTEMS INTERNAL DEV TERMINAL [v3.9.77]
     fade.style.opacity = 0;
     fade.style.transition = "opacity 10s linear";
     document.body.appendChild(fade);
+
+    // Fade in over 10 seconds
     requestAnimationFrame(() => {
       fade.style.opacity = 1;
     });
+
+    // After fade completes, show secret message
+    setTimeout(() => {
+      const msg = document.createElement("div");
+      msg.textContent = "[ SYSTEM LOCKED. YOU WERE NEVER SUPPOSED TO SEE THIS. ]";
+      msg.style.position = "fixed";
+      msg.style.top = "50%";
+      msg.style.left = "50%";
+      msg.style.transform = "translate(-50%, -50%)";
+      msg.style.color = "#ff0000";
+      msg.style.fontFamily = "monospace";
+      msg.style.fontSize = "22px";
+      msg.style.backgroundColor = "black";
+      msg.style.padding = "20px 40px";
+      msg.style.border = "2px solid #ff0000";
+      msg.style.borderRadius = "8px";
+      msg.style.zIndex = 9999;
+      msg.style.textAlign = "center";
+      document.body.appendChild(msg);
+    }, 10000); // 10 seconds = fade duration
   }
 </script>
 </body>
