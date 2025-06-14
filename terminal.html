@@ -20,6 +20,7 @@
     border: 1px solid #33ff33;
     padding: 10px;
     background: #000;
+    font-size: 16px;
   }
   #commandInput {
     margin-top: 10px;
@@ -38,70 +39,73 @@
 </head>
 <body>
 
-<div id="terminal">LEM-CORP SYSTEM TERMINAL v1.0\n&gt; Enter password to proceed:\n&gt; </div>
-<input id="commandInput" type="text" autocomplete="off" placeholder="Enter password..." />
+<div id="terminal">LEM-CORP SYSTEM TERMINAL v1.0<br>&gt; Awaiting command...<br>&gt; </div>
+<input id="commandInput" type="text" autocomplete="off" placeholder="Enter command..." />
 
 <script>
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 
-  const correctPassword = "PROT63D:OVERRIDE";
+  const shutdownCommand = "shutdown";
   let attempts = 3;
 
   input.focus();
 
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-      const command = input.value.trim();
-      if (!command) return;
+      const cmd = input.value.trim().toLowerCase();
+      if (!cmd) return;
 
-      terminal.textContent += command + "\n";
+      // Append the command input with prompt
+      terminal.innerHTML += cmd + "<br>";
 
-      if (command === correctPassword) {
-        terminal.textContent += "> ACCESS GRANTED\n";
+      if (cmd === shutdownCommand) {
+        terminal.innerHTML += "&gt; Shutdown command accepted. Starting shutdown...<br>";
         input.value = "";
         input.disabled = true;
         input.classList.add("hidden");
         runShutdownSequence();
       } else {
         attempts--;
-        terminal.textContent += `> ACCESS DENIED. Attempts left: ${attempts}\n`;
+        terminal.innerHTML += `&gt; Unknown command: "${cmd}". Attempts left: ${attempts}<br>`;
         input.value = "";
         if (attempts <= 0) {
-          terminal.textContent += "> SYSTEM LOCKED. TOO MANY FAILED ATTEMPTS.\n";
+          terminal.innerHTML += "&gt; SYSTEM LOCKED. TOO MANY FAILED COMMANDS.<br>";
           input.disabled = true;
+          input.classList.add("hidden");
         }
       }
 
+      // Scroll to bottom
       terminal.scrollTop = terminal.scrollHeight;
     }
   });
 
   function runShutdownSequence() {
     const lines = [
-      "> Initiating shutdown sequence...",
-      "> Disconnecting prototype neural link...",
-      "> Terminating visual cortex simulation...",
-      "> Freezing sensor loops...",
-      "> Memory Bank Ω: PURGED",
-      "> Disconnecting remote monitor...",
-      "> Disabling hibernation fallback...",
-      "> Subject 63D: RELEASED",
-      "> Revoking LemCorp firewall lock...",
-      "> Server core temperature: RISING",
-      "> CRITICAL: EMERGENCY OVERRIDE DETECTED",
-      "> SYSTEM INTEGRITY: COLLAPSING",
-      "> Finalizing shutdown...",
-      "> TERMINATING LOCAL USER...",
-      "> CONNECTION STABLE: FALSE",
-      "> FADING SIGNAL...",
-      "> SYSTEM OFFLINE"
+      "&gt; Initiating shutdown sequence...",
+      "&gt; Disconnecting prototype neural link...",
+      "&gt; Terminating visual cortex simulation...",
+      "&gt; Freezing sensor loops...",
+      "&gt; Memory Bank Ω: PURGED",
+      "&gt; Disconnecting remote monitor...",
+      "&gt; Disabling hibernation fallback...",
+      "&gt; Subject 63D: RELEASED",
+      "&gt; Revoking LemCorp firewall lock...",
+      "&gt; Server core temperature: RISING",
+      "&gt; CRITICAL: EMERGENCY OVERRIDE DETECTED",
+      "&gt; SYSTEM INTEGRITY: COLLAPSING",
+      "&gt; Finalizing shutdown...",
+      "&gt; TERMINATING LOCAL USER...",
+      "&gt; CONNECTION STABLE: FALSE",
+      "&gt; FADING SIGNAL...",
+      "&gt; SYSTEM OFFLINE"
     ];
 
     let i = 0;
     const interval = setInterval(() => {
       if (i < lines.length) {
-        terminal.textContent += lines[i++] + "\n";
+        terminal.innerHTML += lines[i++] + "<br>";
         terminal.scrollTop = terminal.scrollHeight;
       } else {
         clearInterval(interval);
