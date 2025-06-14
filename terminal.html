@@ -17,20 +17,21 @@
     white-space: pre-wrap;
     max-height: 80vh;
     overflow-y: auto;
-    border: 1px solid #33ff33;
-    padding: 10px;
+    border: 2px solid #33ff33;
+    padding: 20px;
     background: #000;
-    font-size: 16px;
+    font-size: 22px; /* Bigger text */
+    line-height: 1.4;
   }
   #commandInput {
-    margin-top: 10px;
+    margin-top: 15px;
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     background: black;
     color: #33ff33;
-    border: 1px solid #33ff33;
+    border: 2px solid #33ff33;
     font-family: monospace;
-    font-size: 16px;
+    font-size: 22px; /* Bigger input text */
   }
   .hidden {
     display: none;
@@ -46,7 +47,7 @@
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 
-  const shutdownCommand = "shutdown";
+  const shutdownCommand = "shutdown";  // command stays 'shutdown'
   let attempts = 3;
 
   input.focus();
@@ -140,7 +141,7 @@
       msg.style.transform = "translate(-50%, -50%)";
       msg.style.color = "#ff0000";
       msg.style.fontFamily = "monospace";
-      msg.style.fontSize = "22px";
+      msg.style.fontSize = "28px";
       msg.style.backgroundColor = "black";
       msg.style.padding = "20px 40px";
       msg.style.border = "2px solid #ff0000";
