@@ -43,13 +43,6 @@
     color: #ff0000;
     font-weight: bold;
   }
-  .glitch {
-    color: #ff00ff;
-    text-shadow:
-      0 0 5px #ff00ff,
-      0 0 10px #ff00ff,
-      0 0 20px #ff00ff;
-  }
   .progress-bar {
     font-family: monospace;
   }
@@ -98,17 +91,6 @@
     if (className) line.classList.add(className);
     terminal.appendChild(line);
     terminal.scrollTop = terminal.scrollHeight;
-  }
-
-  function glitchLine(text, duration = 1000) {
-    const line = document.createElement("div");
-    line.textContent = text;
-    line.classList.add("glitch");
-    terminal.appendChild(line);
-    terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(() => {
-      line.classList.remove("glitch");
-    }, duration);
   }
 
   function typeOutLine(text, className = "", speed = 30) {
@@ -207,9 +189,9 @@
         return;
       }
 
-      // Unknown command handling with attempts and glitch effect
+      // Unknown command handling
       attempts--;
-      glitchLine(`Unknown command: "${cmdRaw}". Attempts left: ${attempts}`, 1500);
+      appendLine(`Unknown command: "${cmdRaw}". Attempts left: ${attempts}`, "error");
       input.value = "";
       if (attempts <= 0) {
         appendLine("SYSTEM LOCKED. TOO MANY FAILED COMMANDS.", "critical");
@@ -249,7 +231,7 @@
 
     for (let i = 0; i < steps.length; i++) {
       await typeOutLine("&gt; " + steps[i], i >= 10 ? "critical" : "");
-      if (i === 4 || i === 7 || i === 10) { // add progress bar on some steps
+      if (i === 4 || i === 7 || i === 10) {
         for (let p = 0; p <= 100; p += 20) {
           await typeOutLine(progressBar(p), "progress-bar");
           await new Promise(r => setTimeout(r, 150));
