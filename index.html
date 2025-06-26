@@ -84,7 +84,7 @@
       if (e.key === 'Enter') {
         const userInput = input.value.trim().toUpperCase();
         if (userInput === correctPassword) {
-          window.location.href = "root-terminal.html";
+          window.location.href = "terminal.html"; // ✅ CHANGED FROM root-terminal.html
         } else {
           error.style.display = 'block';
           input.value = '';
