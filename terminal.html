@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Root Terminal</title>
+  <title>terminal.log</title>
   <style>
     html, body {
       margin: 0;
@@ -20,38 +20,14 @@
       width: 100vw;
       height: 100vh;
       padding: 20px;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.9);
       z-index: 2;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
 
-    .input-line {
-      font-size: 20px;
-    }
-
-    input {
-      background: transparent;
-      border: none;
-      color: #00ffcc;
-      font-family: 'Courier New', monospace;
-      font-size: 20px;
-      outline: none;
-      width: 400px;
-    }
-
-    #overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      z-index: 1;
-    }
-
-    #forest-video {
+    #video-bg {
       position: absolute;
       top: 0;
       left: 0;
@@ -59,7 +35,7 @@
       width: 100%;
       height: 100%;
       z-index: 0;
-      filter: contrast(1.5) brightness(0.5) saturate(0.8);
+      filter: contrast(1.3) brightness(0.45) grayscale(0.4);
     }
 
     #message {
@@ -68,7 +44,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       color: #00ffcc;
-      font-size: 24px;
+      font-size: 22px;
       text-align: center;
       white-space: pre-line;
       opacity: 0;
@@ -87,58 +63,41 @@
   </style>
 </head>
 <body>
-  <video id="forest-video" class="hidden" autoplay loop muted>
-    <source src="corrupted_forest.mp4" type="video/mp4" />
-    <!-- Replace with actual video URL -->
+
+  <video id="video-bg" autoplay loop muted>
+    <source src="glitched_forest_loop.mp4" type="video/mp4" />
+    <!-- Replace this with your actual glitch forest video -->
   </video>
 
-  <div id="overlay"></div>
-
-  <div id="terminal">
-    <div class="input-line">> ENTER PASSWORD:</div>
-    <input type="text" id="passwordInput" autocomplete="off" />
-  </div>
-
+  <div id="terminal"></div>
   <div id="message" class="hidden"></div>
 
   <script>
-    const input = document.getElementById('passwordInput');
-    const terminal = document.getElementById('terminal');
-    const video = document.getElementById('forest-video');
-    const overlay = document.getElementById('overlay');
     const message = document.getElementById('message');
 
-    const correctPassword = 'BECOME VOID FACED ROOT';
-
     const finalMessages = [
-      "He was never deleted.",
-      "He was left behind.",
-      "And now... you are too."
+      "ACCESS GRANTED.",
+      "",
+      "Echo23 was never deleted.",
+      "They remained.",
+      "We remained.",
+      "",
+      "He is watching.",
+      "He is copying.",
+      "And now...",
+      "You are part of it."
     ];
 
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        if (input.value.trim().toUpperCase() === correctPassword) {
-          terminal.classList.add('hidden');
-          overlay.classList.add('hidden');
-          video.classList.remove('hidden');
-          message.classList.remove('hidden');
-          runFinalMessages();
-        } else {
-          input.value = '';
-        }
-      }
-    });
+    let i = 0;
+    message.textContent = '';
+    message.classList.remove('hidden');
 
-    function runFinalMessages() {
-      let i = 0;
-      message.textContent = '';
-      const interval = setInterval(() => {
-        message.textContent += finalMessages[i] + '\n\n';
-        i++;
-        if (i >= finalMessages.length) clearInterval(interval);
-      }, 2500);
-    }
+    const interval = setInterval(() => {
+      message.textContent += finalMessages[i] + '\n\n';
+      i++;
+      if (i >= finalMessages.length) clearInterval(interval);
+    }, 2500);
   </script>
+
 </body>
 </html>
